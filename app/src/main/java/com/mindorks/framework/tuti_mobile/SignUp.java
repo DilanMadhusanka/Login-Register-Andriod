@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class SignUp extends AppCompatActivity {
     TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
     Button buttonSignUp;
     TextView textViewLogin;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class SignUp extends AppCompatActivity {
         textInputEditTextEmail = findViewById(R.id.email);
         buttonSignUp = findViewById(R.id.buttonSignUp);
         textViewLogin = findViewById(R.id.loginText);
+        progressBar = findViewById(R.id.progress);
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +44,7 @@ public class SignUp extends AppCompatActivity {
                 email = String.valueOf(textInputEditTextEmail.getText());
 
                 if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
-                    //Start ProgressBar first (Set visibility VISIBLE)
+                    progressBar.setVisibility(View.VISIBLE);
                     Handler handler = new Handler();
                     handler.post(new Runnable() {
                         @Override
@@ -62,6 +65,7 @@ public class SignUp extends AppCompatActivity {
                             PutData putData = new PutData("http://192.168.1.100/login_register_tuti/signup.php", "POST", field, data);
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
+                                    progressBar.setVisibility(View.GONE);
                                     String result = putData.getResult();
                                     if (result.equals("Sign Up Success")) {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
